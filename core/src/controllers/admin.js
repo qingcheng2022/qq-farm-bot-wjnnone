@@ -656,6 +656,10 @@ function startAdminServer(dataProvider) {
                 }
             }
 
+            if (provider && typeof provider.broadcastConfig === 'function') {
+                provider.broadcastConfig(accountId);
+            }
+
             const saved = store.getStealFilterConfig ? store.getStealFilterConfig(accountId) : { plantIds: [] };
             res.json({ ok: true, data: saved.plantIds || [] });
         } catch (e) {
@@ -682,6 +686,10 @@ function startAdminServer(dataProvider) {
 
             if (store.setStealFilterConfig) {
                 store.setStealFilterConfig({ ...stealFilter, plantIds: next }, accountId);
+            }
+
+            if (provider && typeof provider.broadcastConfig === 'function') {
+                provider.broadcastConfig(accountId);
             }
 
             const saved = store.getStealFilterConfig ? store.getStealFilterConfig(accountId) : { plantIds: [] };

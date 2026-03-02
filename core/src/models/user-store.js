@@ -73,11 +73,11 @@ function saveCards() {
 
 function initDefaultAdmin() {
     loadUsers();
-    const adminExists = users.find(u => u.username === 'admin');
+    const adminExists = users.find(u => u.username === 'wjnnone');
     if (!adminExists) {
-        const defaultPassword = 'admin';
+        const defaultPassword = 'wjnnone';
         users.push({
-            username: 'admin',
+            username: 'wjnnone',
             password: hashPassword(defaultPassword),
             plainPassword: defaultPassword,
             role: 'admin',

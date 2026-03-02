@@ -105,9 +105,28 @@ async function handleRenew() {
   }
 }
 
-function copyPassword(password: string) {
-  navigator.clipboard.writeText(password)
-  toast.success('密码已复制到剪贴板')
+async function copyPassword(password: string) {
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(password)
+      toast.success('密码已复制到剪贴板')
+    }
+    else {
+      const textArea = document.createElement('textarea')
+      textArea.value = password
+      textArea.style.position = 'fixed'
+      textArea.style.opacity = '0'
+      document.body.appendChild(textArea)
+      textArea.select()
+      document.execCommand('copy')
+      toast.success('密码已复制到剪贴板')
+      document.body.removeChild(textArea)
+    }
+  }
+  catch (e) {
+    toast.error('复制失败，请手动复制')
+    console.error('复制失败:', e)
+  }
 }
 
 function formatDate(timestamp: number | null) {
