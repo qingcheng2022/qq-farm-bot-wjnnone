@@ -80,8 +80,8 @@ pnpm build:web
 # 3. 启动
 pnpm dev:core
 
-# （可选）设置管理密码后启动
-$env:ADMIN_PASSWORD="你的强密码"
+# （可选）设置其他端口后启动
+$env:ADMIN_PORT="你的新端口"
 pnpm dev:core
 ```
 
@@ -113,41 +113,7 @@ ADMIN_PASSWORD='你的强密码' pnpm dev:core
 ---
 
 ## Docker 部署
-
-```bash
-# 构建并后台启动
-docker compose up -d --build
-
-# 查看日志
-docker compose logs -f
-
-# 停止并移除容器
-docker compose down
-```
-
-### 数据持久化
-
-`docker-compose.yml` 已将数据目录挂载：
-
-| 宿主机路径 | 容器内路径 |
-|-----------|-----------|
-| `./data`  | `/app/core/data` |
-
-账号与配置数据保存在 `./data/accounts.json` 和 `./data/store.json`。
-
-### 设置管理密码
-
-在 `docker-compose.yml` 的 `environment` 中配置：
-
-```yaml
-environment:
-  ADMIN_PASSWORD: 你的强密码
-```
-
-修改后执行 `docker compose up -d` 重启生效。
-
----
-
+- 目前不支持（本人不太懂docker）
 ## 二进制发布版（无需 Node.js）
 
 ### 构建
@@ -210,7 +176,6 @@ qq-farm-bot-ui/
 │   │   ├── stores/        # Pinia 状态管理
 │   │   └── views/         # 页面视图
 │   └── dist/              # 构建产物
-├── docker-compose.yml
 ├── pnpm-workspace.yaml
 └── package.json
 ```
@@ -218,7 +183,7 @@ qq-farm-bot-ui/
 ---
 
 ## 特别感谢
-- 主要功能实现：[Penty-d/qq-farm-bot-ui](https://github.com/Penty-d/qq-farm-bot-ui)
+- 基于[Penty-d/qq-farm-bot-ui](https://github.com/Penty-d/qq-farm-bot-ui)二改
 - 核心功能：[linguo2625469/qq-farm-bot](https://github.com/linguo2625469/qq-farm-bot)
 - 部分功能：[QianChenJun/qq-farm-bot](https://github.com/QianChenJun/qq-farm-bot)
 - 扫码登录：[lkeme/QRLib](https://github.com/lkeme/QRLib)
