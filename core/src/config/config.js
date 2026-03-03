@@ -16,7 +16,7 @@ const CONFIG = {
     friendCheckIntervalMin: 12000,// 新逻辑：好友巡查间隔最小值(ms)
     friendCheckIntervalMax: 15000,// 新逻辑：好友巡查间隔最大值(ms)
     adminPort: Number(process.env.ADMIN_PORT || 3000), // 管理面板 HTTP 端口
-    adminPassword: process.env.ADMIN_PASSWORD || 'wjnnone',
+    adminPassword: process.env.ADMIN_PASSWORD || 'admin',
 };
 
 // 生长阶段枚举
