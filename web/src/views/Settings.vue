@@ -61,6 +61,7 @@ const localSettings = ref({
   automation: {
     farm: false,
     task: false,
+    task_plant: false,
     sell: false,
     friend: false,
     farm_push: false,
@@ -83,6 +84,7 @@ const automationMasterSwitch = ref(false)
 const automationBooleanKeys = [
   'farm',
   'task',
+  'task_plant',
   'sell',
   'friend',
   'farm_push',
@@ -101,13 +103,6 @@ watch(automationMasterSwitch, (newVal) => {
     localSettings.value.automation[key] = newVal
   }
 })
-
-watch(
-  () => automationBooleanKeys.map(key => localSettings.value.automation[key]),
-  (vals) => {
-    automationMasterSwitch.value = vals.every(v => v === true)
-  },
-)
 
 const localOffline = ref({
   channel: 'webhook',
@@ -149,6 +144,7 @@ function syncLocalSettings() {
       localSettings.value.automation = {
         farm: false,
         task: false,
+        task_plant: false,
         sell: false,
         friend: false,
         farm_push: false,
@@ -169,6 +165,7 @@ function syncLocalSettings() {
       const defaults = {
         farm: false,
         task: false,
+        task_plant: false,
         sell: false,
         friend: false,
         farm_push: false,
@@ -642,6 +639,7 @@ async function handleTestOffline() {
           <div class="grid grid-cols-2 gap-3 md:grid-cols-3">
             <BaseSwitch v-model="localSettings.automation.farm" label="自动种植收获" />
             <BaseSwitch v-model="localSettings.automation.task" label="自动做任务" />
+            <BaseSwitch v-model="localSettings.automation.task_plant" label="按照任务种值" />
             <BaseSwitch v-model="localSettings.automation.sell" label="自动卖果实" />
             <BaseSwitch v-model="localSettings.automation.friend" label="自动好友互动" />
             <BaseSwitch v-model="localSettings.automation.farm_push" label="推送触发巡田" />

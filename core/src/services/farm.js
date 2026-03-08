@@ -382,7 +382,7 @@ async function plantSeeds(seedId, landIds) {
         } catch (e) {
             logWarn('种植', `土地#${landId} 失败: ${e.message}`);
         }
-        if (landIds.length > 1) await sleep(delayMs);
+        await sleep(delayMs);
     }
     return successCount;
 }

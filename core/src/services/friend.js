@@ -4,7 +4,7 @@
 
 const { CONFIG, PlantPhase, PHASE_NAMES } = require('../config/config');
 const { getPlantName, getPlantById, getSeedImageBySeedId } = require('../config/gameConfig');
-const { isAutomationOn, getFriendQuietHours, getFriendBlacklist, setFriendBlacklist, getPlantBlacklist } = require('../models/store');
+const { isAutomationOn, getFriendQuietHours, getFriendBlacklist, setFriendBlacklist, getPlantBlacklist, getStealDelaySeconds } = require('../models/store');
 const { sendMsgAsync, getUserState, networkEvents } = require('../utils/network');
 const { types } = require('../utils/proto');
 const { toLong, toNum, toTimeSec, getServerTimeSec, log, logWarn, sleep } = require('../utils/utils');
@@ -381,7 +381,7 @@ async function checkCanOperateRemote(friendGid, operationId) {
 // ============ 好友土地分析 ============
 
 function analyzeFriendLands(lands, myGid, friendName = '', options = {}) {
-    const { plantBlacklist = null } = options;
+    const { plantBlacklist = null, stealDelaySeconds = 0 } = options;
     const result = {
         stealable: [],   // 可偷
         stealableInfo: [],  // 可偷植物信息 { landId, plantId, name }
@@ -391,6 +391,8 @@ function analyzeFriendLands(lands, myGid, friendName = '', options = {}) {
         canPutWeed: [],  // 可以放草
         canPutBug: [],   // 可以放虫
     };
+
+    const nowSec = getServerTimeSec();
 
     for (const land of lands) {
         const id = toNum(land.id);
@@ -419,6 +421,21 @@ function analyzeFriendLands(lands, myGid, friendName = '', options = {}) {
                 if (plantBlacklist && seedId > 0 && plantBlacklist.includes(seedId)) {
                     continue;
                 }
+
+                // 偷菜延迟检查 - 检查作物是否已经成熟超过指定的延迟时间
+                if (stealDelaySeconds > 0) {
+                    const maturePhase = plant.phases.find(p => toNum(p.phase) === PlantPhase.MATURE);
+                    if (maturePhase) {
+                        const matureBeginTime = toTimeSec(maturePhase.begin_time);
+                        if (matureBeginTime > 0) {
+                            const maturedSeconds = nowSec - matureBeginTime;
+                            if (maturedSeconds < stealDelaySeconds) {
+                                continue;
+                            }
+                        }
+                    }
+                }
+
                 result.stealable.push(id);
                 result.stealableInfo.push({ landId: id, plantId, name: plantName });
             }
@@ -753,7 +770,8 @@ async function visitFriend(friend, totalActions, myGid, accountId) {
     }
 
     const plantBlacklist = getPlantBlacklist(accountId);
-    const status = analyzeFriendLands(lands, myGid, name, { plantBlacklist });
+    const stealDelaySeconds = getStealDelaySeconds(accountId);
+    const status = analyzeFriendLands(lands, myGid, name, { plantBlacklist, stealDelaySeconds });
 
     // 执行操作
     const actions = [];
@@ -910,7 +928,8 @@ async function visitFriendForSteal(friend, totalActions, myGid, accountId) {
     }
 
     const plantBlacklist = getPlantBlacklist(accountId);
-    const status = analyzeFriendLands(lands, myGid, name, { plantBlacklist });
+    const stealDelaySeconds = getStealDelaySeconds(accountId);
+    const status = analyzeFriendLands(lands, myGid, name, { plantBlacklist, stealDelaySeconds });
 
     const actions = [];
 
