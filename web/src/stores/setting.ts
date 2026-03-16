@@ -71,6 +71,16 @@ export interface StakeoutStealConfig {
   maxAheadSec?: number
 }
 
+export interface RuntimeConfig {
+  serverUrl: string
+  clientVersion: string
+  os: string
+  osVersion: string
+  networkType: string
+  memory: string
+  deviceId: string
+}
+
 export interface SettingsState {
   plantingStrategy: string
   preferredSeedId: number
@@ -291,6 +301,21 @@ export const useSettingStore = defineStore('setting', () => {
     }
   }
 
+  async function saveRuntimeConfig(config: RuntimeConfig) {
+    loading.value = true
+    try {
+      const { data } = await api.post('/api/settings/runtime-config', config)
+      unwrapOk<any>(data as ApiResult<any>, '保存失败')
+      return { ok: true }
+    }
+    catch (e) {
+      return { ok: false, error: getErrorMessage(e, '保存失败') }
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
   async function setAutomationSyncEnabled(accountId: string, enabled: boolean) {
     if (!accountId)
       return { ok: false, error: '未选择账号' }
@@ -307,5 +332,5 @@ export const useSettingStore = defineStore('setting', () => {
     }
   }
 
-  return { settings, loading, fetchSettings, saveSettings, saveStrategySettings, saveAutomationSettings, saveOfflineConfig, setAutomationSyncEnabled }
+  return { settings, loading, fetchSettings, saveSettings, saveStrategySettings, saveAutomationSettings, saveOfflineConfig, saveRuntimeConfig, setAutomationSyncEnabled }
 })

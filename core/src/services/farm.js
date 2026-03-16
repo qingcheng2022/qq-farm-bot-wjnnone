@@ -1788,7 +1788,9 @@ async function executeFastHarvest(landId, matureTimeSec) {
     if (!config.enabled) return;
 
     const nowSec = getServerTimeSec();
-    const waitTimeMs = (matureTimeSec - nowSec) * 1000 - config.advanceMs;
+    // 提前量 (ms)
+    const advanceMs = config.advanceMs || 0;
+    const waitTimeMs = (matureTimeSec - nowSec) * 1000 - advanceMs;
 
     // 如果已经过成熟时间（或提前时间已过），立即收获
     if (waitTimeMs <= 0) {
@@ -1812,42 +1814,59 @@ async function executeFastHarvest(landId, matureTimeSec) {
     // 创建定时任务，在成熟前提前执行
     const taskId = getFastHarvestTaskId();
     const waitSec = Math.max(0, waitTimeMs / 1000);
-    log('秒收取', `土地#${landId} 将在 ${waitSec.toFixed(1)} 秒后执行秒收 (提前 ${config.advanceMs}ms)`, {
+    log('秒收取', `土地#${landId} 将在 ${waitSec.toFixed(1)} 秒后执行秒收 (提前 ${advanceMs}ms)`, {
         module: 'farm',
         event: '秒收取调度',
         landId,
         waitSec,
-        advanceMs: config.advanceMs,
+        advanceMs,
     });
 
     farmScheduler.setTimeoutTask(taskId, waitTimeMs, async () => {
         try {
-            // 再次检查是否已收获（可能被其他人收走了）
-            const landsReply = await getAllLands();
-            const landsMap = buildLandMap(landsReply.lands);
-            const land = landsMap.get(landId);
+            // 执行收获前的小延迟，确保已经过成熟点 (如果 advanceMs > 0)
+            // 这里我们直接执行，因为 advanceMs 就是为了抢先
+            
+            let retryCount = 0;
+            const maxRetries = 2;
+            
+            while (retryCount <= maxRetries) {
+                // 再次检查是否已收获
+                const landsReply = await getAllLands();
+                const landsMap = buildLandMap(landsReply.lands);
+                const land = landsMap.get(landId);
 
-            if (!land || !land.plant) {
-                log('秒收取', `土地#${landId} 已为空，跳过`, { module: 'farm', event: '秒收取跳过', landId });
-                return;
+                if (!land || !land.plant) {
+                    log('秒收取', `土地#${landId} 已为空，跳过`, { module: 'farm', event: '秒收取跳过', landId });
+                    break;
+                }
+
+                const currentPhase = getCurrentPhase(land.plant.phases);
+                if (currentPhase && currentPhase.phase === PlantPhase.MATURE) {
+                    await harvest([landId]);
+                    log('秒收取', `✅ 土地#${landId} 秒收成功`, {
+                        module: 'farm',
+                        event: '秒收取',
+                        result: 'ok',
+                        landId,
+                        mode: 'scheduled',
+                    });
+                    recordOperation('harvest', 1);
+                    addHarvestCount(1);
+                    break;
+                } else {
+                    // 尚未成熟，稍微等一下再试
+                    if (retryCount < maxRetries) {
+                        const retryDelay = 500 + (retryCount * 500);
+                        log('秒收取', `土地#${landId} 尚未成熟，${retryDelay}ms 后重试 (${retryCount + 1}/${maxRetries})`);
+                        await sleep(retryDelay);
+                        retryCount++;
+                    } else {
+                        log('秒收取', `土地#${landId} 达到最大重试次数仍未成熟，跳过`, { module: 'farm', event: '秒收取跳过', landId });
+                        break;
+                    }
+                }
             }
-
-            const currentPhase = getCurrentPhase(land.plant.phases);
-            if (!currentPhase || currentPhase.phase !== PlantPhase.MATURE) {
-                log('秒收取', `土地#${landId} 未成熟，跳过`, { module: 'farm', event: '秒收取跳过', landId });
-                return;
-            }
-
-            await harvest([landId]);
-            log('秒收取', `土地#${landId} 秒收成功`, {
-                module: 'farm',
-                event: '秒收取',
-                result: 'ok',
-                landId,
-                mode: 'scheduled',
-            });
-            recordOperation('harvest', 1);
-            addHarvestCount(1);
         } catch (e) {
             logWarn('秒收取', `土地#${landId} 秒收失败: ${e.message}`);
         }

@@ -558,54 +558,54 @@ onMounted(() => {
 <template>
   <div class="space-y-4">
     <!-- 标签页导航 -->
-    <div class="flex gap-2 border-b border-gray-200 dark:border-gray-700">
+    <div class="flex flex-wrap border-b border-gray-200 dark:border-gray-700">
       <button
-        class="border-b-2 px-4 py-2 text-sm font-medium transition-colors"
+        class="flex-1 border-b-2 px-2 py-2.5 text-sm font-medium transition-colors"
         :class="activeTab === 'cards'
           ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400'
           : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'"
         @click="activeTab = 'cards'"
       >
-        <span class="flex items-center gap-1.5">
-          <div class="i-carbon-ticket" />
-          卡密
-        </span>
+        <div class="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-x-2 sm:space-y-0">
+          <div class="i-carbon-ticket text-xl" />
+          <span class="whitespace-normal text-center">卡密</span>
+        </div>
       </button>
       <button
-        class="border-b-2 px-4 py-2 text-sm font-medium transition-colors"
+        class="flex-1 border-b-2 px-2 py-2.5 text-sm font-medium transition-colors"
         :class="activeTab === 'users'
           ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400'
           : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'"
         @click="activeTab = 'users'"
       >
-        <span class="flex items-center gap-1.5">
-          <div class="i-carbon-user-admin" />
-          用户
-        </span>
+        <div class="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-x-2 sm:space-y-0">
+          <div class="i-carbon-user-admin text-xl" />
+          <span class="whitespace-normal text-center">用户</span>
+        </div>
       </button>
       <button
-        class="border-b-2 px-4 py-2 text-sm font-medium transition-colors"
+        class="flex-1 border-b-2 px-2 py-2.5 text-sm font-medium transition-colors"
         :class="activeTab === 'oauth'
           ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400'
           : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'"
         @click="activeTab = 'oauth'"
       >
-        <span class="flex items-center gap-1.5">
-          <div class="i-carbon-plug" />
-          聚合
-        </span>
+        <div class="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-x-2 sm:space-y-0">
+          <div class="i-carbon-plug text-xl" />
+          <span class="whitespace-normal text-center">聚合</span>
+        </div>
       </button>
       <button
-        class="border-b-2 px-4 py-2 text-sm font-medium transition-colors"
+        class="flex-1 border-b-2 px-2 py-2.5 text-sm font-medium transition-colors"
         :class="activeTab === 'wx'
           ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400'
           : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'"
         @click="activeTab = 'wx'"
       >
-        <span class="flex items-center gap-1.5">
-          <div class="i-carbon-logo-wechat" />
-          微信
-        </span>
+        <div class="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-x-2 sm:space-y-0">
+          <div class="i-carbon-logo-wechat text-xl" />
+          <span class="whitespace-normal text-center">微信</span>
+        </div>
       </button>
     </div>
 

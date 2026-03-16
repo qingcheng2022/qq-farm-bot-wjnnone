@@ -308,47 +308,51 @@ function formatGrowTime(seconds: any) {
 <template>
   <div class="space-y-4">
     <!-- 标签页切换 -->
-    <div class="flex gap-2 border-b border-gray-200 dark:border-gray-700">
+    <div class="flex flex-wrap border-b border-gray-200 dark:border-gray-700">
       <button
-        class="border-b-2 px-4 py-2 text-sm font-medium transition-colors"
+        class="flex-1 border-b-2 px-2 py-2.5 text-sm font-medium transition-colors"
         :class="activeTab === 'crops'
           ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400'
           : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'"
         @click="activeTab = 'crops'"
       >
-        <div class="flex items-center space-x-2">
-          <div class="i-carbon-sprout h-6 w-6 flex items-center justify-center text-lg" />
-          <span>全部作物</span>
-          <span v-if="list.length" class="ml-1 rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700 dark:bg-green-900/50 dark:text-green-300">
-            {{ list.length }}
-          </span>
+        <div class="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-x-2 sm:space-y-0">
+          <div class="i-carbon-sprout text-xl" />
+          <div class="flex items-center">
+            <span class="whitespace-normal text-center">全部作物</span>
+            <span v-if="list.length" class="ml-1 rounded-full bg-green-100 px-2 py-0.5 text-[10px] text-green-700 dark:bg-green-900/50 dark:text-green-300">
+              {{ list.length }}
+            </span>
+          </div>
         </div>
       </button>
       <button
-        class="border-b-2 px-4 py-2 text-sm font-medium transition-colors"
+        class="flex-1 border-b-2 px-2 py-2.5 text-sm font-medium transition-colors"
         :class="activeTab === 'blacklist'
           ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400'
           : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'"
         @click="activeTab = 'blacklist'"
       >
-        <div class="flex items-center space-x-2">
-          <div class="i-carbon-subtract-alt h-6 w-6 flex items-center justify-center text-lg" />
-          <span>黑名单</span>
-          <span v-if="blacklist.length" class="ml-1 rounded-full bg-red-100 px-2 py-0.5 text-xs text-red-700 dark:bg-red-900/50 dark:text-red-300">
-            {{ blacklist.length }}
-          </span>
+        <div class="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-x-2 sm:space-y-0">
+          <div class="i-carbon-subtract-alt text-xl" />
+          <div class="flex items-center">
+            <span class="whitespace-normal text-center">黑名单</span>
+            <span v-if="blacklist.length" class="ml-1 rounded-full bg-red-100 px-2 py-0.5 text-[10px] text-red-700 dark:bg-red-900/50 dark:text-red-300">
+              {{ blacklist.length }}
+            </span>
+          </div>
         </div>
       </button>
       <button
-        class="border-b-2 px-4 py-2 text-sm font-medium transition-colors"
+        class="flex-1 border-b-2 px-2 py-2.5 text-sm font-medium transition-colors"
         :class="activeTab === 'strategy'
           ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400'
           : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'"
         @click="activeTab = 'strategy'"
       >
-        <div class="flex items-center space-x-2">
-          <div class="i-carbon-chart-line h-6 w-6 flex items-center justify-center text-lg" />
-          <span>种植策略</span>
+        <div class="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-x-2 sm:space-y-0">
+          <div class="i-carbon-chart-line text-xl" />
+          <span class="whitespace-normal text-center">种植策略</span>
         </div>
       </button>
     </div>

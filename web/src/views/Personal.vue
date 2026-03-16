@@ -9,41 +9,41 @@ const currentTab = ref<'farm' | 'bag' | 'task'>('farm')
 
 <template>
   <div class="space-y-4">
-    <div class="flex gap-2 border-b border-gray-200 dark:border-gray-700">
+    <div class="flex flex-wrap border-b border-gray-200 dark:border-gray-700">
       <button
-        class="border-b-2 px-4 py-2 text-sm font-medium transition-colors"
+        class="flex-1 border-b-2 px-2 py-2.5 text-sm font-medium transition-colors"
         :class="currentTab === 'farm'
           ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400'
           : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'"
         @click="currentTab = 'farm'"
       >
-        <div class="flex items-center space-x-2">
-          <div class="i-carbon-sprout text-lg" />
-          <span>我的农场</span>
+        <div class="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-x-2 sm:space-y-0">
+          <div class="i-carbon-sprout text-xl" />
+          <span class="whitespace-normal text-center">农场</span>
         </div>
       </button>
       <button
-        class="border-b-2 px-4 py-2 text-sm font-medium transition-colors"
+        class="flex-1 border-b-2 px-2 py-2.5 text-sm font-medium transition-colors"
         :class="currentTab === 'bag'
           ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400'
           : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'"
         @click="currentTab = 'bag'"
       >
-        <div class="flex items-center space-x-2">
-          <div class="i-carbon-box text-lg" />
-          <span>我的背包</span>
+        <div class="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-x-2 sm:space-y-0">
+          <div class="i-carbon-box text-xl" />
+          <span class="whitespace-normal text-center">背包</span>
         </div>
       </button>
       <button
-        class="border-b-2 px-4 py-2 text-sm font-medium transition-colors"
+        class="flex-1 border-b-2 px-2 py-2.5 text-sm font-medium transition-colors"
         :class="currentTab === 'task'
           ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400'
           : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'"
         @click="currentTab = 'task'"
       >
-        <div class="flex items-center space-x-2">
-          <div class="i-carbon-task text-lg" />
-          <span>我的任务</span>
+        <div class="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-x-2 sm:space-y-0">
+          <div class="i-carbon-task text-xl" />
+          <span class="whitespace-normal text-center">任务</span>
         </div>
       </button>
     </div>

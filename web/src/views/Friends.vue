@@ -1008,62 +1008,68 @@ async function handleAddManualHex() {
 
 <template>
   <div class="space-y-4">
-    <div class="flex gap-2 overflow-x-auto border-b border-gray-200 dark:border-gray-700">
+    <div class="flex flex-wrap border-b border-gray-200 dark:border-gray-700">
       <button
-        class="h-10 shrink-0 border-b-2 px-3 py-2 text-sm font-medium transition-colors sm:px-4"
+        class="flex-1 border-b-2 px-2 py-2.5 text-sm font-medium transition-colors"
         :class="activeSidebarTab === 'friends'
           ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400'
           : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'"
         @click="activeSidebarTab = 'friends'"
       >
-        <div class="flex items-center space-x-2">
-          <div class="i-carbon-user-multiple h-6 w-6 flex items-center justify-center text-lg" />
-          <span>好友</span>
+        <div class="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-x-2 sm:space-y-0">
+          <div class="i-carbon-user-multiple text-xl" />
+          <span class="whitespace-normal text-center">好友</span>
         </div>
       </button>
       <button
-        class="h-10 shrink-0 border-b-2 px-3 py-2 text-sm font-medium transition-colors sm:px-4"
+        class="flex-1 border-b-2 px-2 py-2.5 text-sm font-medium transition-colors"
         :class="activeSidebarTab === 'blacklist'
           ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400'
           : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'"
         @click="activeSidebarTab = 'blacklist'"
       >
-        <div class="flex items-center space-x-2">
-          <div class="i-carbon-subtract-alt h-6 w-6 flex items-center justify-center text-lg" />
-          <span>黑名单</span>
-          <span v-if="blacklist.length" class="ml-1 rounded-full bg-red-100 px-2 py-0.5 text-xs text-red-700 dark:bg-red-900/50 dark:text-red-300">
-            {{ blacklist.length }}
-          </span>
+        <div class="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-x-2 sm:space-y-0">
+          <div class="i-carbon-subtract-alt text-xl" />
+          <div class="flex items-center">
+            <span class="whitespace-normal text-center">黑名单</span>
+            <span v-if="blacklist.length" class="ml-1 rounded-full bg-red-100 px-2 py-0.5 text-[10px] text-red-700 dark:bg-red-900/50 dark:text-red-300">
+              {{ blacklist.length }}
+            </span>
+          </div>
         </div>
       </button>
       <button
-        class="h-10 shrink-0 border-b-2 px-3 py-2 text-sm font-medium transition-colors sm:px-4"
+        class="flex-1 border-b-2 px-2 py-2.5 text-sm font-medium transition-colors"
         :class="activeSidebarTab === 'visitors'
           ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400'
           : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'"
         @click="activeSidebarTab = 'visitors'"
       >
-        <div class="flex items-center space-x-2">
-          <div class="i-carbon-view h-6 w-6 flex items-center justify-center text-lg" />
-          <span>访客</span>
-          <span v-if="interactRecords.length" class="ml-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
-            {{ interactRecords.length }}
-          </span>
+        <div class="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-x-2 sm:space-y-0">
+          <div class="i-carbon-view text-xl" />
+          <div class="flex items-center">
+            <span class="whitespace-normal text-center">访客</span>
+            <span v-if="interactRecords.length" class="ml-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
+              {{ interactRecords.length }}
+            </span>
+          </div>
         </div>
       </button>
       <button
-        class="h-10 shrink-0 border-b-2 px-3 py-2 text-sm font-medium transition-colors sm:px-4"
+        class="flex-1 border-b-2 px-2 py-2.5 text-sm font-medium transition-colors"
         :class="activeSidebarTab === 'importBlacklist'
           ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400'
           : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'"
         @click="activeSidebarTab = 'importBlacklist'"
       >
-        <div class="flex items-center space-x-2">
-          <div class="i-carbon-download h-6 w-6 flex items-center justify-center text-lg" />
-          <span>导入黑名单</span>
-          <span v-if="importBlacklist.length" class="ml-1 rounded-full bg-red-100 px-2 py-0.5 text-xs text-red-700 dark:bg-red-900/50 dark:text-red-300">
-            {{ importBlacklist.length }}
-          </span>
+        <div class="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-x-2 sm:space-y-0">
+          <div class="i-carbon-download text-xl" />
+          <div class="flex items-center">
+            <span class="whitespace-normal text-center">导入黑名单</span>
+            <span v-if="importBlacklist.length" class="ml-1 rounded-full bg-red-100 px-2 py-0.5 text-[10px] text-red-700 dark:bg-red-900/50 dark:text-red-300">
+              {{ importBlacklist.length }}
+            </span>
+          </div>
         </div>
       </button>
     </div>

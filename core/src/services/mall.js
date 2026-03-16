@@ -11,7 +11,7 @@ const { getFertilizerBuyType } = require('../models/store');
 const { getDateKey, COOLDOWN_MS } = require('../utils/common');
 
 const ORGANIC_FERTILIZER_MALL_GOODS_ID = 1002;
-const NORMAL_FERTILIZER_MALL_GOODS_ID = 1001;
+const NORMAL_FERTILIZER_MALL_GOODS_ID = 1003;
 const MAX_ROUNDS = 100;
 const BUY_PER_ROUND = 10;
 const FREE_GIFTS_DAILY_KEY = 'mall_free_gifts';

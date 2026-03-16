@@ -988,6 +988,68 @@ function deleteUserOfflineReminder(username) {
     }
 }
 
+// ============ 用户隔离的运行时连接配置 ============
+const DEFAULT_RUNTIME_CONFIG = {
+    serverUrl: 'wss://gate-obt.nqf.qq.com/prod/ws',
+    clientVersion: '1.7.0.6_20260313',
+    os: 'iOS',
+    osVersion: 'iOS 26.2.1',
+    networkType: 'wifi',
+    memory: '7672',
+    deviceId: 'iPhone X<iPhone18,3>',
+};
+
+function normalizeRuntimeConfig(cfg) {
+    const c = cfg || {};
+    return {
+        serverUrl: String(c.serverUrl || DEFAULT_RUNTIME_CONFIG.serverUrl).trim(),
+        clientVersion: String(c.clientVersion || DEFAULT_RUNTIME_CONFIG.clientVersion).trim(),
+        os: String(c.os || DEFAULT_RUNTIME_CONFIG.os).trim(),
+        osVersion: String(c.osVersion || DEFAULT_RUNTIME_CONFIG.osVersion).trim(),
+        networkType: String(c.networkType || DEFAULT_RUNTIME_CONFIG.networkType).trim(),
+        memory: String(c.memory || DEFAULT_RUNTIME_CONFIG.memory).trim(),
+        deviceId: String(c.deviceId || DEFAULT_RUNTIME_CONFIG.deviceId).trim(),
+    };
+}
+
+function getRuntimeConfig(username) {
+    // 必须指定用户名，按用户隔离
+    if (!username) {
+        return normalizeRuntimeConfig(globalConfig.runtimeConfig);
+    }
+    const userCfg = globalConfig.userRuntimeConfigs && globalConfig.userRuntimeConfigs[username];
+    if (userCfg) {
+        return normalizeRuntimeConfig(userCfg);
+    }
+    // 用户未设置时返回默认配置（但不保存到全局）
+    return normalizeRuntimeConfig({});
+}
+
+function setRuntimeConfig(cfg, username) {
+    // 必须指定用户名，按用户隔离
+    if (!username) {
+        // 兼容旧版本：如果没有指定用户名，保存到全局配置
+        const current = normalizeRuntimeConfig(globalConfig.runtimeConfig);
+        globalConfig.runtimeConfig = normalizeRuntimeConfig({ ...current, ...(cfg || {}) });
+        saveGlobalConfig();
+        return getRuntimeConfig();
+    }
+    if (!globalConfig.userRuntimeConfigs) {
+        globalConfig.userRuntimeConfigs = {};
+    }
+    const current = normalizeRuntimeConfig(globalConfig.userRuntimeConfigs[username] || {});
+    globalConfig.userRuntimeConfigs[username] = normalizeRuntimeConfig({ ...current, ...(cfg || {}) });
+    saveGlobalConfig();
+    return getRuntimeConfig(username);
+}
+
+function deleteUserRuntimeConfig(username) {
+    if (globalConfig.userRuntimeConfigs && globalConfig.userRuntimeConfigs[username]) {
+        delete globalConfig.userRuntimeConfigs[username];
+        saveGlobalConfig();
+    }
+}
+
 function getUserAutomationSync(username) {
     const u = String(username || '').trim();
     if (!u) return { enabled: false, snapshot: {} };
@@ -1239,6 +1301,10 @@ module.exports = {
     getOfflineReminder,
     setOfflineReminder,
     deleteUserOfflineReminder,
+    // 运行时连接配置
+    getRuntimeConfig,
+    setRuntimeConfig,
+    deleteUserRuntimeConfig,
     getUserAutomationSync,
     setUserAutomationSync,
     setUserAutomationSyncSnapshot,
